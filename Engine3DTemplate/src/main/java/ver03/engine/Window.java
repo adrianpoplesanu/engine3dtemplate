@@ -10,6 +10,7 @@ public class Window {
     private int frames;
     private long window;
     private static long time;
+    public Input input;
 
     public Window(int height, int width, String title) {
         this.height = height;
@@ -23,6 +24,7 @@ public class Window {
             return;
         }
 
+        input = new Input();
         window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
 
         if (window == 0) {
@@ -34,7 +36,9 @@ public class Window {
         GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
         GLFW.glfwMakeContextCurrent(window);
 
-        //createCallbacks();
+        GLFW.glfwSetKeyCallback(window, input.getKeyboardCallback());
+        GLFW.glfwSetCursorPosCallback(window, input.getMouseMoveCallback());
+        GLFW.glfwSetMouseButtonCallback(window, input.getMouseButtonsCallback());
 
         GLFW.glfwShowWindow(window);
 
@@ -59,5 +63,12 @@ public class Window {
 
     public boolean shouldClose() {
         return GLFW.glfwWindowShouldClose(window);
+    }
+
+    public void destroy() {
+        input.destroy();
+        GLFW.glfwWindowShouldClose(window);
+        GLFW.glfwDestroyWindow(window);
+        GLFW.glfwTerminate();
     }
 }

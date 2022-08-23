@@ -1,5 +1,7 @@
 package ver03;
 
+import org.lwjgl.glfw.GLFW;
+import ver03.engine.Input;
 import ver03.engine.Window;
 
 public class GameLoop {
@@ -17,6 +19,7 @@ public class GameLoop {
 
     private void update() {
         window.update();
+        if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) System.out.println("X: " + Input.getMouseX() + ", Y: " + Input.getMouseY());
     }
 
     private void render() {
@@ -28,6 +31,8 @@ public class GameLoop {
         while (!window.shouldClose()) {
             update();
             render();
+            if (Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) return;
         }
+        window.destroy();
     }
 }
